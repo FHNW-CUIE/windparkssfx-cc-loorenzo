@@ -1,7 +1,19 @@
 .simple-control {
     -fx-padding:          5;
-    -fx-background-color: rgb(12, 12, 12);
-    -base-color:          rgb(2, 138, 204);
+    -fx-background-color: black;
+}
+
+.simple-control .bar {
+    -fx-fill:  white;
+}
+
+.simple-control .empty-bar {
+    -fx-fill:  gray;
+}
+
+.simple-control .tick {
+    -fx-stroke: black;
+    -fx-stroke-width: 2;
 }
 
 .simple-control .background-circle {
