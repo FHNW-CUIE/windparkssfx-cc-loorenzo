@@ -1,6 +1,9 @@
 .simple-control {
     -fx-padding:          5;
     -fx-background-color: black;
+    -fx-font-family: 'DS-Digital';
+    -fx-font-size:   16;
+    -fx-text-fill: black;
 }
 
 .simple-control .bar {
@@ -20,12 +23,14 @@
     -fx-fill: -base-color;
 }
 
-.simple-control .display {
-    -fx-font-family: 'Lato Light';
-    -fx-font-size:   24;
-    -fx-fill:        derive(-base-color, 90%);
+.simple-control .title {
+    -fx-font-size:   30;
+    -fx-text-fill: white;
 }
 
+.simple-control .production {
+    -fx-text-fill: white;
+}
 
 .windmill-range {
     -fx-padding: 5;

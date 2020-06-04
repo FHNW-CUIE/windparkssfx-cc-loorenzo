@@ -21,6 +21,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.geometry.VPos;
 import javafx.scene.Group;
+import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -66,13 +67,14 @@ public class SimpleControl extends Region {
     private static final double MAXIMUM_WIDTH = 800;    // ToDo: Anpassen
 
     // ToDo: diese Parts durch alle notwendigen Parts der gewünschten CustomControl ersetzen
-    private VBox prodPanel;
+    private VBox prodPanel, left;
     private HBox dashboard;
     private CustomTickBar bar1;
     private CustomTickBar bar2;
     private CustomTickBar bar3;
     private CustomTickBar bar4;
     private WindmillRange wr;
+    private Label title, production;
 
 
     // ToDo: ersetzen durch alle notwendigen Properties der CustomControl
@@ -125,7 +127,7 @@ public class SimpleControl extends Region {
     }
 
     private void initializeSelf() {
-        loadFonts("/fonts/Lato/Lato-Lig.ttf", "/fonts/Lato/Lato-Reg.ttf");
+        loadFonts("/fonts/Lato/Lato-Lig.ttf", "/fonts/Lato/Lato-Reg.ttf", "/fonts/ds_digital/DS-DIGI.TTF");
         addStylesheetFiles("style.css");
 
         getStyleClass().add("simple-control");  // ToDo: an den Namen der Klasse (des CustomControls) anpassen
@@ -134,13 +136,18 @@ public class SimpleControl extends Region {
     private void initializeParts() {
         //ToDo: alle deklarierten Parts initialisieren
         double center = ARTBOARD_WIDTH * 0.5;
+        title = new Label("WindPark blabla");
+        title.getStyleClass().add("title");
+        production = new Label("Production:");
+        production.getStyleClass().add("production");
         bar1 = new CustomTickBar(100, 20, 20);
         bar2 = new CustomTickBar(100, 20, 30);
         bar3 = new CustomTickBar(100, 20, 70);
         bar4 = new CustomTickBar(100, 20, 90);
         wr = new WindmillRange();
-        prodPanel = new VBox(bar1, bar2, bar3, bar4);
-        dashboard = new HBox(prodPanel, wr);
+        prodPanel = new VBox(production, bar1, bar2, bar3, bar4);
+        left = new VBox(title, prodPanel);
+        dashboard = new HBox(left, wr);
 
     }
 
@@ -159,6 +166,9 @@ public class SimpleControl extends Region {
     private void layoutParts() {
 
         //ToDo: alle Parts zur drawingPane hinzufügen
+        left.setSpacing(30);
+        dashboard.setSpacing(30);
+        prodPanel.setSpacing(15);
         drawingPane.getChildren().addAll(dashboard);
         getChildren().add(drawingPane);
     }
