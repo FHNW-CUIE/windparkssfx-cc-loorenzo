@@ -66,7 +66,7 @@ public class CustomTickBar extends Region {
 
     private void setupValueChangeListeners() {
         barVal.addListener((observable, oldValue, newValue) -> {
-
+            this.bar.setWidth(newValue.doubleValue());
         });
     }
 

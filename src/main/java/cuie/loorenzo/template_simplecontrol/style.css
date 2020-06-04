@@ -25,3 +25,44 @@
     -fx-font-size:   24;
     -fx-fill:        derive(-base-color, 90%);
 }
+
+
+.windmill-range {
+    -fx-padding: 5;
+    -fx-background-color: rgb(12, 12, 12);
+}
+
+.windmill-range .background-circle {
+    -fx-stroke-width: 30;
+    -fx-stroke: rgb(40, 40, 40);
+    -fx-fill: transparent;
+}
+
+.windmill-range .bar {
+    -fx-stroke-width: 30;
+    -fx-stroke: rgb(58, 233, 6);
+    -fx-stroke-line-cap: round;
+    -fx-fill: transparent;
+}
+
+.windmill-range .thumb {
+    -fx-fill: rgb(40, 40, 40);
+    -fx-cursor: hand;
+}
+
+.windmill-range .value-display {
+    -fx-font-family: 'Lato Light';
+    -fx-font-size: 48;
+    -fx-fill: white;
+}
+
+.number-range .tick {
+    -fx-stroke: rgb(87, 87, 87);
+    -fx-stroke-width: 2;
+}
+
+.number-range .tick-label {
+    -fx-font-family: 'Lato Light';
+    -fx-font-size: 12;
+    -fx-fill: rgb(87, 87, 87);
+}

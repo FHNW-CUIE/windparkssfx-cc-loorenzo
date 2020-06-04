@@ -4,10 +4,14 @@ import javafx.geometry.Insets;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
 import cuie.loorenzo.template_simplecontrol.SimpleControl;
+import javafx.util.converter.NumberStringConverter;
+
+import java.util.Locale;
 
 public class DemoPane extends BorderPane {
 
@@ -18,7 +22,6 @@ public class DemoPane extends BorderPane {
 
     // all controls
     private Slider      slider;
-    private ColorPicker colorPicker;
 
     public DemoPane(PresentationModel pm) {
         this.pm = pm;
@@ -34,13 +37,10 @@ public class DemoPane extends BorderPane {
 
         slider = new Slider();
         slider.setShowTickLabels(true);
-
-        colorPicker = new ColorPicker();
     }
 
     private void layoutControls() {
-        VBox controlPane = new VBox(new Label("SimpleControl Properties"),
-                                    slider, colorPicker);
+        VBox controlPane = new VBox(new Label("Range Properties"),slider);
         controlPane.setPadding(new Insets(0, 50, 0, 50));
         controlPane.setSpacing(10);
 
@@ -50,11 +50,9 @@ public class DemoPane extends BorderPane {
 
     private void setupBindings() {
         slider.valueProperty().bindBidirectional(pm.pmValueProperty());
-        colorPicker.valueProperty().bindBidirectional(pm.baseColorProperty());
-
-
         cc.valueProperty().bindBidirectional(pm.pmValueProperty());
-        cc.baseColorProperty().bindBidirectional(pm.baseColorProperty());
+        cc.getBar1().barValProperty().bindBidirectional(pm.pmValueProperty());
+
     }
 
 }

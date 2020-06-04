@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
+import org.scenicview.ScenicView;
 
 public class DemoStarter extends Application {
 
@@ -16,8 +17,8 @@ public class DemoStarter extends Application {
 
         primaryStage.setTitle("Simple Control Demo");
         primaryStage.setScene(scene);
-
         primaryStage.show();
+       // ScenicView.show(scene);
     }
 
     public static void main(String[] args) {

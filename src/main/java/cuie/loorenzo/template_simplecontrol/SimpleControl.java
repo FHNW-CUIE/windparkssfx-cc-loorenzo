@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Locale;
 
 import cuie.loorenzo.template_simplecontrol.components.CustomTickBar;
+import cuie.loorenzo.template_simplecontrol.components.WindmillRange;
 import javafx.animation.AnimationTimer;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
@@ -53,8 +54,8 @@ public class SimpleControl extends Region {
 
     private static final Locale CH = new Locale("de", "CH");
 
-    private static final double ARTBOARD_WIDTH = 100;  // ToDo: Breite der "Zeichnung" aus dem Grafik-Tool übernehmen
-    private static final double ARTBOARD_HEIGHT = 100;  // ToDo: Anpassen an die Breite der Zeichnung
+    private static final double ARTBOARD_WIDTH = 600;  // ToDo: Breite der "Zeichnung" aus dem Grafik-Tool übernehmen
+    private static final double ARTBOARD_HEIGHT = 600;  // ToDo: Anpassen an die Breite der Zeichnung
 
     private static final double ASPECT_RATIO = ARTBOARD_WIDTH / ARTBOARD_HEIGHT;
 
@@ -69,6 +70,7 @@ public class SimpleControl extends Region {
     private CustomTickBar bar2;
     private CustomTickBar bar3;
     private CustomTickBar bar4;
+    private WindmillRange wr;
 
 
     // ToDo: ersetzen durch alle notwendigen Properties der CustomControl
@@ -134,7 +136,9 @@ public class SimpleControl extends Region {
         bar2 = new CustomTickBar(100, 20, 30);
         bar3 = new CustomTickBar(100, 20, 70);
         bar4 = new CustomTickBar(100, 20, 90);
-        prodPanel = new VBox(bar1, bar2, bar3, bar4);
+        wr = new WindmillRange();
+        prodPanel = new VBox(bar1, bar2, bar3, bar4, wr);
+
     }
 
     private void initializeDrawingPane() {
@@ -524,5 +528,45 @@ public class SimpleControl extends Region {
 
     public void setPulse(Duration pulse) {
         this.pulse.set(pulse);
+    }
+
+    public CustomTickBar getBar1() {
+        return bar1;
+    }
+
+    public void setBar1(CustomTickBar bar1) {
+        this.bar1 = bar1;
+    }
+
+    public CustomTickBar getBar2() {
+        return bar2;
+    }
+
+    public void setBar2(CustomTickBar bar2) {
+        this.bar2 = bar2;
+    }
+
+    public CustomTickBar getBar3() {
+        return bar3;
+    }
+
+    public void setBar3(CustomTickBar bar3) {
+        this.bar3 = bar3;
+    }
+
+    public CustomTickBar getBar4() {
+        return bar4;
+    }
+
+    public void setBar4(CustomTickBar bar4) {
+        this.bar4 = bar4;
+    }
+
+    public WindmillRange getWr() {
+        return wr;
+    }
+
+    public void setWr(WindmillRange wr) {
+        this.wr = wr;
     }
 }

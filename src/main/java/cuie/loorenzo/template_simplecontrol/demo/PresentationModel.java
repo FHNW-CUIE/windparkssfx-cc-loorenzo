@@ -8,7 +8,6 @@ import javafx.scene.paint.Color;
 
 public class PresentationModel {
     private final DoubleProperty        pmValue   = new SimpleDoubleProperty();
-    private final ObjectProperty<Color> baseColor = new SimpleObjectProperty<>();
 
     public double getPmValue() {
         return pmValue.get();
@@ -22,15 +21,4 @@ public class PresentationModel {
         this.pmValue.set(pmValue);
     }
 
-    public Color getBaseColor() {
-        return baseColor.get();
-    }
-
-    public ObjectProperty<Color> baseColorProperty() {
-        return baseColor;
-    }
-
-    public void setBaseColor(Color baseColor) {
-        this.baseColor.set(baseColor);
-    }
 }
