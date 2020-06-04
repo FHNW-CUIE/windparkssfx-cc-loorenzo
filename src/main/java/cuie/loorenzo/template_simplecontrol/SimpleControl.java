@@ -22,6 +22,7 @@ import javafx.geometry.Point2D;
 import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
@@ -66,6 +67,7 @@ public class SimpleControl extends Region {
 
     // ToDo: diese Parts durch alle notwendigen Parts der gewünschten CustomControl ersetzen
     private VBox prodPanel;
+    private HBox dashboard;
     private CustomTickBar bar1;
     private CustomTickBar bar2;
     private CustomTickBar bar3;
@@ -137,7 +139,8 @@ public class SimpleControl extends Region {
         bar3 = new CustomTickBar(100, 20, 70);
         bar4 = new CustomTickBar(100, 20, 90);
         wr = new WindmillRange();
-        prodPanel = new VBox(bar1, bar2, bar3, bar4, wr);
+        prodPanel = new VBox(bar1, bar2, bar3, bar4);
+        dashboard = new HBox(prodPanel, wr);
 
     }
 
@@ -156,7 +159,7 @@ public class SimpleControl extends Region {
     private void layoutParts() {
 
         //ToDo: alle Parts zur drawingPane hinzufügen
-        drawingPane.getChildren().addAll(prodPanel);
+        drawingPane.getChildren().addAll(dashboard);
         getChildren().add(drawingPane);
     }
 

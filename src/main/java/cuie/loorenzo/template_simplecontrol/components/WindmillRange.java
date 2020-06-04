@@ -55,6 +55,17 @@ public class WindmillRange extends Region {
 
     ImageView image = new ImageView(new Image("images/wind-turbine.png"));
 
+    //NUmber Range
+    private Circle     backgroundCircle;
+    private Arc        bar;
+    private Circle     thumb;
+    private Text       valueDisplay;
+    private Group      ticks;
+    private List<Text> tickLabels;
+    private final DoubleProperty minValue     = new SimpleDoubleProperty(0);
+    private final DoubleProperty maxValue     = new SimpleDoubleProperty(200);
+    private final DoubleProperty currentValue = new SimpleDoubleProperty(50);
+
     public WindmillRange() {
         initializeSelf();
         initializeParts();
@@ -70,13 +81,41 @@ public class WindmillRange extends Region {
     }
 
     private void initializeParts() {
+
+        double center = ARTBOARD_WIDTH * 0.5;
+        int    width  = 15;
+        double radius = center - width + 2;
+
+        backgroundCircle = new Circle(center, center, radius);
+        backgroundCircle.getStyleClass().add("background-circle");
+
+        bar = new Arc(center, center, radius, radius, 90.0, -180.0);
+        bar.getStyleClass().add("bar");
+        bar.setType(ArcType.OPEN);
+
+        thumb = new Circle(center, center + center - width, 13);
+        thumb.getStyleClass().add("thumb");
+
+        valueDisplay = createCenteredText(center, center, "value-display");
+        ticks = createTicks(center, center, 120, 360.0, 28, -1, 0, "tick");
+
+        tickLabels = new ArrayList<>();
+
+        int labelCount = 8;
+        for (int i = 0; i < labelCount; i++) {
+            double r     = 95;
+            double angle = i * 360.0 / labelCount;
+
+            Point2D p         = pointOnCircle(center, center, r, angle);
+            Text    tickLabel = createCenteredText(p.getX(), p.getY(), "tick-label");
+
+            tickLabels.add(tickLabel);
+        }
+        updateTickLabels();
+
+
         background = new Canvas(ARTBOARD_WIDTH, ARTBOARD_HEIGHT);
         background.setMouseTransparent(true);
-        drawingPane = new Pane();
-        drawingPane.setMaxSize(ARTBOARD_WIDTH, ARTBOARD_HEIGHT);
-        drawingPane.setMinSize(ARTBOARD_WIDTH, ARTBOARD_HEIGHT);
-        drawingPane.setPrefSize(ARTBOARD_WIDTH, ARTBOARD_HEIGHT);
-        drawingPane.getStyleClass().add("drawing-pane");
         animation().start();
         drawCanvas();
     }
@@ -85,8 +124,6 @@ public class WindmillRange extends Region {
         GraphicsContext gc = background.getGraphicsContext2D();
         double width = background.getWidth();
         double height = background.getHeight();
-        double lineWidth = 4 * scalingFactor;
-
         gc.clearRect(0, 0, width, height);
         double startPoint = ARTBOARD_WIDTH / 2;
         double startPointY = ARTBOARD_HEIGHT / 2;
@@ -102,21 +139,44 @@ public class WindmillRange extends Region {
 
 
     private void initializeDrawingPane() {
-
+        drawingPane = new Pane();
+        drawingPane.setMaxSize(ARTBOARD_WIDTH, ARTBOARD_HEIGHT);
+        drawingPane.setMinSize(ARTBOARD_WIDTH, ARTBOARD_HEIGHT);
+        drawingPane.setPrefSize(ARTBOARD_WIDTH, ARTBOARD_HEIGHT);
+        drawingPane.getStyleClass().add("drawing-pane");
     }
 
     private void layoutParts() {
         image.setFitHeight(300);
         image.setFitWidth(300);
-        getChildren().addAll(drawingPane, background, image);
+        drawingPane.getChildren().addAll(background, image, backgroundCircle, bar, valueDisplay, ticks, thumb);
+        getChildren().addAll(drawingPane);
     }
 
     private void setupEventHandlers() {
+        thumb.setOnMouseDragged(event -> {
+            double center = ARTBOARD_WIDTH * 0.5;
 
+            setCurrentValue(radialMousePositionToValue(event.getX(), event.getY(),
+                    center, center,
+                    getMinValue(), getMaxValue()));
+        });
     }
 
     private void setupValueChangeListeners() {
+        currentValue.addListener((observable, oldValue, newValue) -> {
+            updateThumbAndBar();
+        });
 
+        minValue.addListener((observable, oldValue, newValue) -> {
+            updateTickLabels();
+            updateThumbAndBar();
+        });
+
+        maxValue.addListener((observable, oldValue, newValue) -> {
+            updateTickLabels();
+            updateThumbAndBar();
+        });
     }
 
     private void setupBinding() {
@@ -134,7 +194,7 @@ public class WindmillRange extends Region {
         return new AnimationTimer() {
             @Override
             public void handle(long now) {
-                image.setRotate(image.getRotate() + 1);
+                image.setRotate(image.getRotate() + (0.1 * getCurrentValue()));
             }
         };
     }
@@ -147,6 +207,25 @@ public class WindmillRange extends Region {
 
     //ToDo: diese Funktionen anschauen und für die Umsetzung des CustomControls benutzen
 
+    private void updateTickLabels() {
+        int labelCount = tickLabels.size();
+        double step    = (getMaxValue() - getMinValue()) / labelCount;
+        for (int i = 0; i < labelCount; i++) {
+            Text tickLabel = tickLabels.get(i);
+            tickLabel.setText(String.format("%.0f", getMinValue() + (i * step)));
+        }
+    }
+
+    private void updateThumbAndBar() {
+        double angle = valueToAngle(getCurrentValue(), getMinValue(), getMaxValue());
+
+        bar.setLength(Math.min(-0.05, -angle));
+
+        double  center      = ARTBOARD_WIDTH * 0.5;
+        Point2D thumbCenter = pointOnCircle(center, center, center - 15, angle);
+        thumb.setCenterX(thumbCenter.getX());
+        thumb.setCenterY(thumbCenter.getY());
+    }
 
     private double percentageToValue(double percentage, double minValue, double maxValue) {
         return ((maxValue - minValue) * percentage) + minValue;
@@ -266,5 +345,41 @@ public class WindmillRange extends Region {
     }
 
     // alle getter und setter  (generiert via "Code -> Generate... -> Getter and Setter)
+
+    public double getMinValue() {
+        return minValue.get();
+    }
+
+    public DoubleProperty minValueProperty() {
+        return minValue;
+    }
+
+    public void setMinValue(double minValue) {
+        this.minValue.set(minValue);
+    }
+
+    public double getMaxValue() {
+        return maxValue.get();
+    }
+
+    public DoubleProperty maxValueProperty() {
+        return maxValue;
+    }
+
+    public void setMaxValue(double maxValue) {
+        this.maxValue.set(maxValue);
+    }
+
+    public double getCurrentValue() {
+        return currentValue.get();
+    }
+
+    public DoubleProperty currentValueProperty() {
+        return currentValue;
+    }
+
+    public void setCurrentValue(double currentValue) {
+        this.currentValue.set(currentValue);
+    }
 
 }
