@@ -50,9 +50,6 @@ public class DemoPane extends BorderPane {
 
     private void setupBindings() {
         slider.valueProperty().bindBidirectional(pm.pmValueProperty());
-        cc.valueProperty().bindBidirectional(pm.pmValueProperty());
-        cc.getBar1().barValProperty().bindBidirectional(pm.pmValueProperty());
-
     }
 
 }

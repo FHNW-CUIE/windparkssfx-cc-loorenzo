@@ -1,18 +1,35 @@
 .simple-control {
-    -fx-padding:          5;
+    -fx-padding: 5;
     -fx-background-color: black;
     -fx-font-family: 'DS-Digital';
-    -fx-font-size:   16;
-    -fx-text-fill: black;
+    -fx-font-size: 16;
+    -fx-text-fill: white;
+}
+
+.simple-control .label {
+    -fx-font-family: 'DS-Digital';
+    -fx-font-size: 16;
+    -fx-text-fill: white;
 }
 
 .simple-control .bar {
-    -fx-fill: linear-gradient(to right, red , yellow);
-
+    -fx-fill: linear-gradient(to right, red, yellow);
 }
 
 .simple-control .empty-bar {
-    -fx-fill:  rgb(40, 40, 40);
+    -fx-fill: rgb(40, 40, 40);
+}
+
+.simple-control .transparent-bar {
+    -fx-fill: transparent;
+    -fx-cursor: w_resize;
+}
+
+.simple-control .text-field {
+    -fx-max-width: 80px;
+    -fx-max-height: 10px;
+    -fx-background-color: black;
+    -fx-text-fill: white;
 }
 
 .simple-control .tick {
@@ -25,7 +42,7 @@
 }
 
 .simple-control .title {
-    -fx-font-size:   30;
+    -fx-font-size: 30;
     -fx-text-fill: white;
 }
 
