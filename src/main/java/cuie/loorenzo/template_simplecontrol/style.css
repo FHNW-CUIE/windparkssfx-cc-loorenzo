@@ -7,7 +7,8 @@
 }
 
 .simple-control .bar {
-    -fx-fill:  white;
+    -fx-fill: linear-gradient(to right, red , yellow);
+
 }
 
 .simple-control .empty-bar {
@@ -45,7 +46,7 @@
 
 .windmill-range .bar {
     -fx-stroke-width: 10;
-    -fx-stroke: darkred;
+    -fx-stroke: linear-gradient(to top, yellow, red);
     -fx-stroke-line-cap: round;
     -fx-fill: transparent;
 }
