@@ -1,37 +1,33 @@
 package cuie.loorenzo.template_simplecontrol.components;
 
 import javafx.animation.AnimationTimer;
-import javafx.animation.KeyFrame;
-import javafx.animation.RotateTransition;
-import javafx.animation.Timeline;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.geometry.VPos;
 import javafx.scene.Group;
-import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.CycleMethod;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Stop;
-import javafx.scene.shape.*;
-import javafx.scene.text.Font;
+import javafx.scene.shape.Arc;
+import javafx.scene.shape.ArcType;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextBoundsType;
-import javafx.util.Duration;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 public class WindmillRange extends Region {
+
+    private static final double SPIN_FACTOR = 5;
 
     private static final double ARTBOARD_WIDTH = 300;
     private static final double ARTBOARD_HEIGHT = 300;
@@ -45,23 +41,23 @@ public class WindmillRange extends Region {
 
     private Canvas background;
     private Pane drawingPane;
-    private double scalingFactor = 1.0;
 
     ImageView image = new ImageView(new Image("images/wind-turbine.png"));
 
     //NUmber Range
 
-    private Circle     backgroundCircle;
-    private Arc        bar;
-    private Circle     thumb;
-    private Text       valueDisplay;
-    private Group      ticks;
+    private Circle backgroundCircle;
+    private Arc bar;
+    private Circle thumb;
+    private Text valueDisplay;
+    private Group ticks;
     private List<Text> tickLabels;
-    private final DoubleProperty minValue     = new SimpleDoubleProperty(0);
-    private final DoubleProperty maxValue     = new SimpleDoubleProperty(200);
-    private final DoubleProperty currentValue = new SimpleDoubleProperty(50);
+    private final DoubleProperty currentValue = new SimpleDoubleProperty();
+    private final double maxValue;
 
-    public WindmillRange() {
+    public WindmillRange(double currentValue, double maxValue) {
+        this.currentValue.set(currentValue);
+        this.maxValue = maxValue;
         initializeSelf();
         initializeParts();
         initializeDrawingPane();
@@ -78,7 +74,7 @@ public class WindmillRange extends Region {
     private void initializeParts() {
 
         double center = ARTBOARD_WIDTH * 0.5;
-        int    width  = 15;
+        int width = 15;
         double radius = center - width + 2;
 
         backgroundCircle = new Circle(center, center, radius);
@@ -98,11 +94,11 @@ public class WindmillRange extends Region {
 
         int labelCount = 8;
         for (int i = 0; i < labelCount; i++) {
-            double r     = 95;
+            double r = 95;
             double angle = i * 360.0 / labelCount;
 
-            Point2D p         = pointOnCircle(center, center, r, angle);
-            Text    tickLabel = createCenteredText(p.getX(), p.getY(), "tick-label");
+            Point2D p = pointOnCircle(center, center, r, angle);
+            Text tickLabel = createCenteredText(p.getX(), p.getY(), "tick-label");
 
             tickLabels.add(tickLabel);
         }
@@ -124,7 +120,7 @@ public class WindmillRange extends Region {
         double startPointY = ARTBOARD_HEIGHT / 2;
         gc.setFill(Color.WHITE);
         gc.beginPath();
-        gc.moveTo(startPoint-3, startPointY);
+        gc.moveTo(startPoint - 3, startPointY);
         gc.lineTo(startPoint + 3, startPointY);
         gc.lineTo(startPoint + 13, ARTBOARD_HEIGHT);
         gc.lineTo(startPoint - 13, ARTBOARD_HEIGHT);
@@ -151,25 +147,13 @@ public class WindmillRange extends Region {
     private void setupEventHandlers() {
         thumb.setOnMouseDragged(event -> {
             double center = ARTBOARD_WIDTH * 0.5;
-
             setCurrentValue(radialMousePositionToValue(event.getX(), event.getY(),
-                    center, center,
-                    getMinValue(), getMaxValue()));
+                    center, center, 0, this.maxValue));
         });
     }
 
     private void setupValueChangeListeners() {
         currentValue.addListener((observable, oldValue, newValue) -> {
-            updateThumbAndBar();
-        });
-
-        minValue.addListener((observable, oldValue, newValue) -> {
-            updateTickLabels();
-            updateThumbAndBar();
-        });
-
-        maxValue.addListener((observable, oldValue, newValue) -> {
-            updateTickLabels();
             updateThumbAndBar();
         });
     }
@@ -189,7 +173,8 @@ public class WindmillRange extends Region {
         return new AnimationTimer() {
             @Override
             public void handle(long now) {
-                image.setRotate(image.getRotate() + (0.1 * getCurrentValue()));
+                double valFactor = (currentValue.get() / maxValue);
+                image.setRotate(image.getRotate() + (SPIN_FACTOR * valFactor));
             }
         };
     }
@@ -204,19 +189,17 @@ public class WindmillRange extends Region {
 
     private void updateTickLabels() {
         int labelCount = tickLabels.size();
-        double step    = (getMaxValue() - getMinValue()) / labelCount;
+        double step = this.maxValue / labelCount;
         for (int i = 0; i < labelCount; i++) {
             Text tickLabel = tickLabels.get(i);
-            tickLabel.setText(String.format("%.0f", getMinValue() + (i * step)));
+            tickLabel.setText(String.format("%.0f", i * step));
         }
     }
 
     private void updateThumbAndBar() {
-        double angle = valueToAngle(getCurrentValue(), getMinValue(), getMaxValue());
-
+        double angle = valueToAngle(getCurrentValue(), 0, this.maxValue);
         bar.setLength(Math.min(-0.05, -angle));
-
-        double  center      = ARTBOARD_WIDTH * 0.5;
+        double center = ARTBOARD_WIDTH * 0.5;
         Point2D thumbCenter = pointOnCircle(center, center, center - 15, angle);
         thumb.setCenterX(thumbCenter.getX());
         thumb.setCenterY(thumbCenter.getY());
@@ -340,30 +323,6 @@ public class WindmillRange extends Region {
     }
 
     // alle getter und setter  (generiert via "Code -> Generate... -> Getter and Setter)
-
-    public double getMinValue() {
-        return minValue.get();
-    }
-
-    public DoubleProperty minValueProperty() {
-        return minValue;
-    }
-
-    public void setMinValue(double minValue) {
-        this.minValue.set(minValue);
-    }
-
-    public double getMaxValue() {
-        return maxValue.get();
-    }
-
-    public DoubleProperty maxValueProperty() {
-        return maxValue;
-    }
-
-    public void setMaxValue(double maxValue) {
-        this.maxValue.set(maxValue);
-    }
 
     public double getCurrentValue() {
         return currentValue.get();

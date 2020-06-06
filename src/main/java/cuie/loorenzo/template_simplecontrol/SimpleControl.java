@@ -129,8 +129,8 @@ public class SimpleControl extends Region {
         hBox3.setSpacing(10);
         hBox4 = new HBox(prod4, bar4, field4);
         hBox4.setSpacing(10);
-        wr = new WindmillRange();
-        powerDisplay = new PowerDisplay();
+        wr = new WindmillRange(4000, 6000);
+        powerDisplay = new PowerDisplay(4000, 6000);
 
         prodPanel = new VBox(production, hBox1, hBox2, hBox3, hBox4, powerDisplay);
         left = new VBox(title, prodPanel);
@@ -171,6 +171,7 @@ public class SimpleControl extends Region {
         field2.textProperty().bindBidirectional(bar2.barValProperty(), new NumberStringConverter());
         field3.textProperty().bindBidirectional(bar3.barValProperty(), new NumberStringConverter());
         field4.textProperty().bindBidirectional(bar4.barValProperty(), new NumberStringConverter());
+        wr.currentValueProperty().bindBidirectional(powerDisplay.powerValueProperty());
     }
 
     @Override
