@@ -69,8 +69,6 @@ public class Windmill extends Region {
         int width = 15;
         double radius = center - width + 2;
 
-        this.image = new ImageView(new Image("images/wind-turbine.png"));
-
         this.backgroundCircle = new Circle(center, center, radius);
         this.backgroundCircle.getStyleClass().add("background-circle");
 
@@ -81,6 +79,7 @@ public class Windmill extends Region {
         this.thumb = new Circle(center, center + center - width, 13);
         this.thumb.getStyleClass().add("thumb");
 
+        this.image = new ImageView(new Image("images/wind-turbine.png"));
         this.valueDisplay = createCenteredText(center, center, "value-display");
         this.ticks = createTicks(center, center, 120, 360.0, 28, -1, 0, "tick");
 
@@ -130,6 +129,7 @@ public class Windmill extends Region {
     }
 
     private void layoutParts() {
+        updateThumbAndBar();
         this.image.setFitHeight(300);
         this.image.setFitWidth(300);
         this.drawingPane.getChildren().addAll(this.tower, this.image, this.backgroundCircle, this.bar, this.valueDisplay, this.ticks, this.thumb);
@@ -208,7 +208,6 @@ public class Windmill extends Region {
 
     private double radialMousePositionToValue(double mouseX, double mouseY, double cx, double cy, double minValue, double maxValue) {
         double percentage = angleToPercentage(angle(cx, cy, mouseX, mouseY));
-
         return percentageToValue(percentage, minValue, maxValue);
     }
 
@@ -236,10 +235,6 @@ public class Windmill extends Region {
                 cY + (radius * Math.cos(Math.toRadians(angle - 180))));
     }
 
-    private Text createCenteredText(String styleClass) {
-        return createCenteredText(ARTBOARD_WIDTH * 0.5, ARTBOARD_HEIGHT * 0.5, styleClass);
-    }
-
     private Text createCenteredText(double cx, double cy, String styleClass) {
         Text text = new Text();
         text.getStyleClass().add(styleClass);
@@ -256,7 +251,6 @@ public class Windmill extends Region {
 
     private Group createTicks(double cx, double cy, int numberOfTicks, double overallAngle, double tickLength, double indent, double startingAngle, String styleClass) {
         Group group = new Group();
-
         double degreesBetweenTicks = overallAngle == 360 ?
                 overallAngle / numberOfTicks :
                 overallAngle / (numberOfTicks - 1);
@@ -275,14 +269,10 @@ public class Windmill extends Region {
             } else {
                 tick.getStyleClass().add(styleClass);
             }
-
             group.getChildren().add(tick);
         }
-
         return group;
     }
-
-    // compute sizes
 
     @Override
     protected double computeMinWidth(double height) {

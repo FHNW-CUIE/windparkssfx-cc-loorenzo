@@ -29,13 +29,13 @@ public class SimpleControl extends Region {
     private static final double MINIMUM_HEIGHT = MINIMUM_WIDTH / ASPECT_RATIO;
     private static final double MAXIMUM_WIDTH = 800;
 
-    private VBox prodPanel, left;
+    private VBox prodPanel, left, right;
     private HBox dashboard;
     private ProductionBar bar1;
     private ProductionBar bar2;
     private ProductionBar bar3;
     private ProductionBar bar4;
-    private Windmill wr;
+    private Windmill windmill;
     private Label title, production;
     private Pane drawingPane;
     private PowerDisplay powerDisplay;
@@ -67,14 +67,13 @@ public class SimpleControl extends Region {
         this.bar2 = new ProductionBar("2016", 4000, maxVal);
         this.bar3 = new ProductionBar("2017", 5500, maxVal);
         this.bar4 = new ProductionBar("2018", 6000, maxVal);
-        this.wr = new Windmill(4000, 6000);
+        this.windmill = new Windmill(4000, 6000);
         this.powerDisplay = new PowerDisplay(4000, 6000);
 
         this.prodPanel = new VBox(this.production, this.bar1, this.bar2, this.bar3, this.bar4, this.powerDisplay);
         this.left = new VBox(this.title, this.prodPanel);
-        this.dashboard = new HBox(this.left, this.wr);
-
-
+        this.right = new VBox(new Pane(), this.windmill);
+        this.dashboard = new HBox(this.left, this.right);
     }
 
     private void initializeDrawingPane() {
@@ -91,6 +90,7 @@ public class SimpleControl extends Region {
 
     private void layoutParts() {
         this.left.setSpacing(30);
+        this.right.setSpacing(30);
         this.dashboard.setSpacing(30);
         this.prodPanel.setSpacing(15);
         this.drawingPane.getChildren().addAll(this.dashboard);
@@ -105,7 +105,7 @@ public class SimpleControl extends Region {
     }
 
     private void setupBindings() {
-        this.wr.currentValueProperty().bindBidirectional(this.powerDisplay.powerValueProperty());
+        this.windmill.currentValueProperty().bindBidirectional(this.powerDisplay.powerValueProperty());
     }
 
     @Override
@@ -216,11 +216,11 @@ public class SimpleControl extends Region {
         this.bar4 = bar4;
     }
 
-    public Windmill getWr() {
-        return this.wr;
+    public Windmill getWindmill() {
+        return this.windmill;
     }
 
-    public void setWr(Windmill wr) {
-        this.wr = wr;
+    public void setWindmill(Windmill windmill) {
+        this.windmill = windmill;
     }
 }

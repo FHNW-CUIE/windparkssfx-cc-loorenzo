@@ -13,7 +13,7 @@ import javafx.scene.shape.Rectangle;
 
 public class PowerDisplay extends Region {
 
-    private final double ICON_SQUARE_SITE = 50;
+    private final double ICON_SQUARE_SITE = 70;
 
     private VBox vBox;
     private HBox hBox;
@@ -28,6 +28,7 @@ public class PowerDisplay extends Region {
     public PowerDisplay(double powerVal, double maxPowerVal) {
         this.powerValue.set(powerVal);
         this.maxPowerValue = maxPowerVal;
+        initializeSelf();
         initializeParts();
         layoutParts();
         setupEventHandlers();
@@ -35,12 +36,16 @@ public class PowerDisplay extends Region {
         setupBindings();
     }
 
+    private void initializeSelf() {
+        getStyleClass().add("power-display");
+    }
+
     private void initializeParts() {
         this.power = new Pane();
         this.iconBackground = new Rectangle(this.ICON_SQUARE_SITE, getBackgroundHeight());
         this.powerIcon = new ImageView(new Image("images/flash.png"));
         this.powerLabel = new Label("Leistung (kW): ");
-        this.powerVal = new Label("4000");
+        this.powerVal = new Label(this.powerValue.toString());
         this.vBox = new VBox(this.powerLabel, this.powerVal);
         this.hBox = new HBox(this.power, this.vBox);
     }
@@ -48,8 +53,10 @@ public class PowerDisplay extends Region {
     private void layoutParts() {
         this.iconBackground.getStyleClass().add("power-background");
         this.powerIcon.getStyleClass().add("power-icon");
-        this.powerIcon.setFitHeight(50);
-        this.powerIcon.setFitWidth(50);
+        this.powerVal.getStyleClass().add("power-label");
+        this.powerVal.getStyleClass().add("power-label");
+        this.powerIcon.setFitHeight(this.ICON_SQUARE_SITE);
+        this.powerIcon.setFitWidth(this.ICON_SQUARE_SITE);
         this.iconBackground.setScaleX(1);
         this.iconBackground.setScaleY(-1);
         this.vBox.setSpacing(10);
