@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Locale;
 
 import cuie.loorenzo.template_simplecontrol.components.CustomTickBar;
+import cuie.loorenzo.template_simplecontrol.components.PowerDisplay;
 import cuie.loorenzo.template_simplecontrol.components.WindmillRange;
 import javafx.animation.AnimationTimer;
 import javafx.beans.property.BooleanProperty;
@@ -24,6 +25,8 @@ import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
@@ -79,8 +82,9 @@ public class SimpleControl extends Region {
     private WindmillRange wr;
     private Label title, production, prod1, prod2, prod3, prod4;
     private TextField field1, field2, field3, field4;
-
     private Pane drawingPane;
+
+    private PowerDisplay powerDisplay;
 
     public SimpleControl() {
         initializeSelf();
@@ -126,9 +130,13 @@ public class SimpleControl extends Region {
         hBox4 = new HBox(prod4, bar4, field4);
         hBox4.setSpacing(10);
         wr = new WindmillRange();
-        prodPanel = new VBox(production, hBox1, hBox2, hBox3, hBox4);
+        powerDisplay = new PowerDisplay();
+
+        prodPanel = new VBox(production, hBox1, hBox2, hBox3, hBox4, powerDisplay);
         left = new VBox(title, prodPanel);
         dashboard = new HBox(left, wr);
+
+
     }
 
     private void initializeDrawingPane() {

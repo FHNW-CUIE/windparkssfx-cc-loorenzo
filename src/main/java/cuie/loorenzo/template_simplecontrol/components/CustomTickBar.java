@@ -26,8 +26,6 @@ public class CustomTickBar extends Region {
         this.barVal.set(val);
         this.maxVal = maxVal;
         initializeParts();
-        initializeDrawingPane();
-        initializeAnimations();
         layoutParts();
         setupEventHandlers();
         setupValueChangeListeners();
@@ -56,19 +54,12 @@ public class CustomTickBar extends Region {
         return ticks;
     }
 
-    private void initializeDrawingPane() {
-    }
-
-    private void initializeAnimations() {
-    }
-
     private void layoutParts() {
         this.getChildren().addAll(emptyBar, bar, ticks, transparentBar);
     }
 
     private void setupEventHandlers() {
         transparentBar.setOnMouseDragged((MouseEvent e) -> {
-            System.out.println(this.width);
             if (e.getX() > this.width) {
                 this.bar.setWidth(this.width);
                 this.setBarVal(this.maxVal);
