@@ -25,26 +25,18 @@ import javafx.scene.text.TextBoundsType;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WindmillRange extends Region {
+public class Windmill extends Region {
 
     private static final double SPIN_FACTOR = 5;
-
     private static final double ARTBOARD_WIDTH = 300;
     private static final double ARTBOARD_HEIGHT = 300;
-
     private static final double ASPECT_RATIO = ARTBOARD_WIDTH / ARTBOARD_HEIGHT;
-
     private static final double MINIMUM_WIDTH = 75;
     private static final double MINIMUM_HEIGHT = MINIMUM_WIDTH / ASPECT_RATIO;
 
-    private static final double MAXIMUM_WIDTH = 800;
-
-    private Canvas background;
+    private Canvas tower;
     private Pane drawingPane;
-
-    ImageView image = new ImageView(new Image("images/wind-turbine.png"));
-
-    //NUmber Range
+    private ImageView image;
 
     private Circle backgroundCircle;
     private Arc bar;
@@ -55,7 +47,7 @@ public class WindmillRange extends Region {
     private final DoubleProperty currentValue = new SimpleDoubleProperty();
     private final double maxValue;
 
-    public WindmillRange(double currentValue, double maxValue) {
+    public Windmill(double currentValue, double maxValue) {
         this.currentValue.set(currentValue);
         this.maxValue = maxValue;
         initializeSelf();
@@ -68,7 +60,7 @@ public class WindmillRange extends Region {
     }
 
     private void initializeSelf() {
-        getStyleClass().add("windmill-range");
+        getStyleClass().add("windmill");
     }
 
     private void initializeParts() {
@@ -77,44 +69,44 @@ public class WindmillRange extends Region {
         int width = 15;
         double radius = center - width + 2;
 
-        backgroundCircle = new Circle(center, center, radius);
-        backgroundCircle.getStyleClass().add("background-circle");
+        this.image = new ImageView(new Image("images/wind-turbine.png"));
 
-        bar = new Arc(center, center, radius, radius, 90.0, -180.0);
-        bar.getStyleClass().add("bar");
-        bar.setType(ArcType.OPEN);
+        this.backgroundCircle = new Circle(center, center, radius);
+        this.backgroundCircle.getStyleClass().add("background-circle");
 
-        thumb = new Circle(center, center + center - width, 13);
-        thumb.getStyleClass().add("thumb");
+        this.bar = new Arc(center, center, radius, radius, 90.0, -180.0);
+        this.bar.getStyleClass().add("bar");
+        this.bar.setType(ArcType.OPEN);
 
-        valueDisplay = createCenteredText(center, center, "value-display");
-        ticks = createTicks(center, center, 120, 360.0, 28, -1, 0, "tick");
+        this.thumb = new Circle(center, center + center - width, 13);
+        this.thumb.getStyleClass().add("thumb");
 
-        tickLabels = new ArrayList<>();
+        this.valueDisplay = createCenteredText(center, center, "value-display");
+        this.ticks = createTicks(center, center, 120, 360.0, 28, -1, 0, "tick");
 
-        int labelCount = 8;
+        this.tickLabels = new ArrayList<>();
+
+        int labelCount = 5;
         for (int i = 0; i < labelCount; i++) {
             double r = 95;
             double angle = i * 360.0 / labelCount;
-
             Point2D p = pointOnCircle(center, center, r, angle);
             Text tickLabel = createCenteredText(p.getX(), p.getY(), "tick-label");
-
-            tickLabels.add(tickLabel);
+            this.tickLabels.add(tickLabel);
         }
         updateTickLabels();
 
 
-        background = new Canvas(ARTBOARD_WIDTH, ARTBOARD_HEIGHT);
-        background.setMouseTransparent(true);
+        this.tower = new Canvas(ARTBOARD_WIDTH, ARTBOARD_HEIGHT);
+        this.tower.setMouseTransparent(true);
         animation().start();
         drawCanvas();
     }
 
     private void drawCanvas() {
-        GraphicsContext gc = background.getGraphicsContext2D();
-        double width = background.getWidth();
-        double height = background.getHeight();
+        GraphicsContext gc = this.tower.getGraphicsContext2D();
+        double width = this.tower.getWidth();
+        double height = this.tower.getHeight();
         gc.clearRect(0, 0, width, height);
         double startPoint = ARTBOARD_WIDTH / 2;
         double startPointY = ARTBOARD_HEIGHT / 2;
@@ -130,22 +122,23 @@ public class WindmillRange extends Region {
 
 
     private void initializeDrawingPane() {
-        drawingPane = new Pane();
-        drawingPane.setMaxSize(ARTBOARD_WIDTH, ARTBOARD_HEIGHT);
-        drawingPane.setMinSize(ARTBOARD_WIDTH, ARTBOARD_HEIGHT);
-        drawingPane.setPrefSize(ARTBOARD_WIDTH, ARTBOARD_HEIGHT);
-        drawingPane.getStyleClass().add("drawing-pane");
+        this.drawingPane = new Pane();
+        this.drawingPane.setMaxSize(ARTBOARD_WIDTH, ARTBOARD_HEIGHT);
+        this.drawingPane.setMinSize(ARTBOARD_WIDTH, ARTBOARD_HEIGHT);
+        this.drawingPane.setPrefSize(ARTBOARD_WIDTH, ARTBOARD_HEIGHT);
+        this.drawingPane.getStyleClass().add("drawing-pane");
     }
 
     private void layoutParts() {
-        image.setFitHeight(300);
-        image.setFitWidth(300);
-        drawingPane.getChildren().addAll(background, image, backgroundCircle, bar, valueDisplay, ticks, thumb);
-        getChildren().addAll(drawingPane);
+        this.image.setFitHeight(300);
+        this.image.setFitWidth(300);
+        this.drawingPane.getChildren().addAll(this.tower, this.image, this.backgroundCircle, this.bar, this.valueDisplay, this.ticks, this.thumb);
+        this.drawingPane.getChildren().addAll(this.tickLabels);
+        getChildren().addAll(this.drawingPane);
     }
 
     private void setupEventHandlers() {
-        thumb.setOnMouseDragged(event -> {
+        this.thumb.setOnMouseDragged(event -> {
             double center = ARTBOARD_WIDTH * 0.5;
             setCurrentValue(radialMousePositionToValue(event.getX(), event.getY(),
                     center, center, 0, this.maxValue));
@@ -153,7 +146,7 @@ public class WindmillRange extends Region {
     }
 
     private void setupValueChangeListeners() {
-        currentValue.addListener((observable, oldValue, newValue) -> {
+        this.currentValue.addListener((observable, oldValue, newValue) -> {
             updateThumbAndBar();
         });
     }
@@ -173,8 +166,8 @@ public class WindmillRange extends Region {
         return new AnimationTimer() {
             @Override
             public void handle(long now) {
-                double valFactor = (currentValue.get() / maxValue);
-                image.setRotate(image.getRotate() + (SPIN_FACTOR * valFactor));
+                double valFactor = (Windmill.this.currentValue.get() / Windmill.this.maxValue);
+                Windmill.this.image.setRotate(Windmill.this.image.getRotate() + (SPIN_FACTOR * valFactor));
             }
         };
     }
@@ -183,26 +176,22 @@ public class WindmillRange extends Region {
         //TODO
     }
 
-    // some handy functions
-
-    //ToDo: diese Funktionen anschauen und für die Umsetzung des CustomControls benutzen
-
     private void updateTickLabels() {
-        int labelCount = tickLabels.size();
+        int labelCount = this.tickLabels.size();
         double step = this.maxValue / labelCount;
         for (int i = 0; i < labelCount; i++) {
-            Text tickLabel = tickLabels.get(i);
+            Text tickLabel = this.tickLabels.get(i);
             tickLabel.setText(String.format("%.0f", i * step));
         }
     }
 
     private void updateThumbAndBar() {
         double angle = valueToAngle(getCurrentValue(), 0, this.maxValue);
-        bar.setLength(Math.min(-0.05, -angle));
+        this.bar.setLength(Math.min(-0.05, -angle));
         double center = ARTBOARD_WIDTH * 0.5;
         Point2D thumbCenter = pointOnCircle(center, center, center - 15, angle);
-        thumb.setCenterX(thumbCenter.getX());
-        thumb.setCenterY(thumbCenter.getY());
+        this.thumb.setCenterX(thumbCenter.getX());
+        this.thumb.setCenterY(thumbCenter.getY());
     }
 
     private double percentageToValue(double percentage, double minValue, double maxValue) {
@@ -276,12 +265,17 @@ public class WindmillRange extends Region {
 
         for (int i = 0; i < numberOfTicks; i++) {
             double angle = 180 + startingAngle + i * degreesBetweenTicks;
-
             Point2D startPoint = pointOnCircle(cx, cy, outerRadius, angle);
             Point2D endPoint = pointOnCircle(cx, cy, innerRadius, angle);
-
             Line tick = new Line(startPoint.getX(), startPoint.getY(), endPoint.getX(), endPoint.getY());
-            tick.getStyleClass().add(styleClass);
+
+            int n = (numberOfTicks / 5);
+            if ((i + (n / 2)) % n == 0) {
+                tick.getStyleClass().add("tick-white");
+            } else {
+                tick.getStyleClass().add(styleClass);
+            }
+
             group.getChildren().add(tick);
         }
 
@@ -325,11 +319,11 @@ public class WindmillRange extends Region {
     // alle getter und setter  (generiert via "Code -> Generate... -> Getter and Setter)
 
     public double getCurrentValue() {
-        return currentValue.get();
+        return this.currentValue.get();
     }
 
     public DoubleProperty currentValueProperty() {
-        return currentValue;
+        return this.currentValue;
     }
 
     public void setCurrentValue(double currentValue) {

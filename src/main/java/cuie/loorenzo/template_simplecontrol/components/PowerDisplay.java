@@ -13,7 +13,7 @@ import javafx.scene.shape.Rectangle;
 
 public class PowerDisplay extends Region {
 
-    private double ICON_SQUARE_SITE = 50;
+    private final double ICON_SQUARE_SITE = 50;
 
     private VBox vBox;
     private HBox hBox;
@@ -22,8 +22,8 @@ public class PowerDisplay extends Region {
     private ImageView powerIcon;
     private Label powerLabel, powerVal;
 
-    private DoubleProperty powerValue = new SimpleDoubleProperty();
-    private double maxPowerValue;
+    private final DoubleProperty powerValue = new SimpleDoubleProperty();
+    private final double maxPowerValue;
 
     public PowerDisplay(double powerVal, double maxPowerVal) {
         this.powerValue.set(powerVal);
@@ -36,51 +36,51 @@ public class PowerDisplay extends Region {
     }
 
     private void initializeParts() {
-        power = new Pane();
-        iconBackground = new Rectangle(ICON_SQUARE_SITE,getBackgroundHeight());
-        powerIcon = new ImageView(new Image("images/flash.png"));
-        powerLabel = new Label("Leistung (kW): ");
-        powerVal = new Label("4000");
-        vBox = new VBox(powerLabel, powerVal);
-        hBox = new HBox(power, vBox);
+        this.power = new Pane();
+        this.iconBackground = new Rectangle(this.ICON_SQUARE_SITE, getBackgroundHeight());
+        this.powerIcon = new ImageView(new Image("images/flash.png"));
+        this.powerLabel = new Label("Leistung (kW): ");
+        this.powerVal = new Label("4000");
+        this.vBox = new VBox(this.powerLabel, this.powerVal);
+        this.hBox = new HBox(this.power, this.vBox);
     }
 
     private void layoutParts() {
-        iconBackground.getStyleClass().add("power-background");
-        powerIcon.getStyleClass().add("power-icon");
-        powerIcon.setFitHeight(50);
-        powerIcon.setFitWidth(50);
-        iconBackground.setScaleX(1);
-        iconBackground.setScaleY(-1);
-        vBox.setSpacing(10);
-        hBox.setSpacing(10);
-        power.getChildren().addAll(iconBackground, powerIcon);
-        getChildren().addAll(hBox);
+        this.iconBackground.getStyleClass().add("power-background");
+        this.powerIcon.getStyleClass().add("power-icon");
+        this.powerIcon.setFitHeight(50);
+        this.powerIcon.setFitWidth(50);
+        this.iconBackground.setScaleX(1);
+        this.iconBackground.setScaleY(-1);
+        this.vBox.setSpacing(10);
+        this.hBox.setSpacing(10);
+        this.power.getChildren().addAll(this.iconBackground, this.powerIcon);
+        getChildren().addAll(this.hBox);
     }
 
-    private double getBackgroundHeight(){
-        return (ICON_SQUARE_SITE/maxPowerValue) * powerValue.get();
+    private double getBackgroundHeight() {
+        return (this.ICON_SQUARE_SITE / this.maxPowerValue) * this.powerValue.get();
     }
 
     private void setupEventHandlers() {
     }
 
     private void setupValueChangeListeners() {
-        powerValue.addListener((observable, oldValue, newValue) -> {
-            iconBackground.setHeight(getBackgroundHeight());
+        this.powerValue.addListener((observable, oldValue, newValue) -> {
+            this.iconBackground.setHeight(getBackgroundHeight());
         });
     }
 
     private void setupBindings() {
-        powerVal.textProperty().bind(this.powerValue.asString("%.2f"));
+        this.powerVal.textProperty().bind(this.powerValue.asString("%.2f"));
     }
 
     public double getPowerValue() {
-        return powerValue.get();
+        return this.powerValue.get();
     }
 
     public DoubleProperty powerValueProperty() {
-        return powerValue;
+        return this.powerValue;
     }
 
     public void setPowerValue(double powerValue) {

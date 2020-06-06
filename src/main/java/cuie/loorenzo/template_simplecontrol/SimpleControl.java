@@ -2,10 +2,7 @@ package cuie.loorenzo.template_simplecontrol;
 
 import cuie.loorenzo.template_simplecontrol.components.PowerDisplay;
 import cuie.loorenzo.template_simplecontrol.components.ProductionBar;
-import cuie.loorenzo.template_simplecontrol.components.WindmillRange;
-import javafx.css.CssMetaData;
-import javafx.css.Styleable;
-import javafx.css.StyleablePropertyFactory;
+import cuie.loorenzo.template_simplecontrol.components.Windmill;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -13,9 +10,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
-
-import java.util.List;
-import java.util.Locale;
 
 /**
  * ToDo: CustomControl kurz beschreiben
@@ -26,37 +20,24 @@ import java.util.Locale;
  */
 //ToDo: Umbenennen.
 public class SimpleControl extends Region {
-    // wird gebraucht fuer StyleableProperties
-    private static final StyleablePropertyFactory<SimpleControl> FACTORY = new StyleablePropertyFactory<>(Region.getClassCssMetaData());
-
-    @Override
-    public List<CssMetaData<? extends Styleable, ?>> getCssMetaData() {
-        return FACTORY.getCssMetaData();
-    }
-
-    private static final Locale CH = new Locale("de", "CH");
 
     private static final double ARTBOARD_WIDTH = 600;
     private static final double ARTBOARD_HEIGHT = 600;
-
     private static final double ASPECT_RATIO = ARTBOARD_WIDTH / ARTBOARD_HEIGHT;
 
     private static final double MINIMUM_WIDTH = 25;
     private static final double MINIMUM_HEIGHT = MINIMUM_WIDTH / ASPECT_RATIO;
-
     private static final double MAXIMUM_WIDTH = 800;
 
-    // ToDo: diese Parts durch alle notwendigen Parts der gewünschten CustomControl ersetzen
     private VBox prodPanel, left;
     private HBox dashboard;
     private ProductionBar bar1;
     private ProductionBar bar2;
     private ProductionBar bar3;
     private ProductionBar bar4;
-    private WindmillRange wr;
+    private Windmill wr;
     private Label title, production;
     private Pane drawingPane;
-
     private PowerDisplay powerDisplay;
 
     public SimpleControl() {
@@ -73,7 +54,7 @@ public class SimpleControl extends Region {
     private void initializeSelf() {
         loadFonts("/fonts/Lato/Lato-Lig.ttf", "/fonts/Lato/Lato-Reg.ttf", "/fonts/ds_digital/DS-DIGI.TTF");
         addStylesheetFiles("style.css");
-        getStyleClass().add("simple-control");  // ToDo: an den Namen der Klasse (des CustomControls) anpassen
+        getStyleClass().add("windpark");  // ToDo: an den Namen der Klasse (des CustomControls) anpassen
     }
 
     private void initializeParts() {
@@ -86,7 +67,7 @@ public class SimpleControl extends Region {
         this.bar2 = new ProductionBar("2016", 4000, maxVal);
         this.bar3 = new ProductionBar("2017", 5500, maxVal);
         this.bar4 = new ProductionBar("2018", 6000, maxVal);
-        this.wr = new WindmillRange(4000, 6000);
+        this.wr = new Windmill(4000, 6000);
         this.powerDisplay = new PowerDisplay(4000, 6000);
 
         this.prodPanel = new VBox(this.production, this.bar1, this.bar2, this.bar3, this.bar4, this.powerDisplay);
@@ -235,11 +216,11 @@ public class SimpleControl extends Region {
         this.bar4 = bar4;
     }
 
-    public WindmillRange getWr() {
+    public Windmill getWr() {
         return this.wr;
     }
 
-    public void setWr(WindmillRange wr) {
+    public void setWr(Windmill wr) {
         this.wr = wr;
     }
 }
