@@ -72,7 +72,7 @@ public class PowerDisplay extends Region {
     }
 
     private void setupBindings() {
-        powerVal.textProperty().bind(this.powerValue.asString());
+        powerVal.textProperty().bind(this.powerValue.asString("%.2f"));
     }
 
     public double getPowerValue() {

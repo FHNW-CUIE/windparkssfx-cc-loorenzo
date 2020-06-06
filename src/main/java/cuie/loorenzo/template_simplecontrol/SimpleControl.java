@@ -1,47 +1,21 @@
 package cuie.loorenzo.template_simplecontrol;
 
-import java.util.List;
-import java.util.Locale;
-
-import cuie.loorenzo.template_simplecontrol.components.CustomTickBar;
 import cuie.loorenzo.template_simplecontrol.components.PowerDisplay;
+import cuie.loorenzo.template_simplecontrol.components.ProductionBar;
 import cuie.loorenzo.template_simplecontrol.components.WindmillRange;
-import javafx.animation.AnimationTimer;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.css.CssMetaData;
-import javafx.css.SimpleStyleableObjectProperty;
 import javafx.css.Styleable;
-import javafx.css.StyleableObjectProperty;
 import javafx.css.StyleablePropertyFactory;
 import javafx.geometry.Insets;
-import javafx.geometry.Point2D;
-import javafx.geometry.VPos;
-import javafx.scene.Group;
 import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
-import javafx.scene.text.TextBoundsType;
-import javafx.util.Duration;
-import javafx.util.StringConverter;
-import javafx.util.converter.NumberStringConverter;
+
+import java.util.List;
+import java.util.Locale;
 
 /**
  * ToDo: CustomControl kurz beschreiben
@@ -74,14 +48,13 @@ public class SimpleControl extends Region {
 
     // ToDo: diese Parts durch alle notwendigen Parts der gewünschten CustomControl ersetzen
     private VBox prodPanel, left;
-    private HBox dashboard, hBox1, hBox2, hBox3, hBox4;
-    private CustomTickBar bar1;
-    private CustomTickBar bar2;
-    private CustomTickBar bar3;
-    private CustomTickBar bar4;
+    private HBox dashboard;
+    private ProductionBar bar1;
+    private ProductionBar bar2;
+    private ProductionBar bar3;
+    private ProductionBar bar4;
     private WindmillRange wr;
-    private Label title, production, prod1, prod2, prod3, prod4;
-    private TextField field1, field2, field3, field4;
+    private Label title, production;
     private Pane drawingPane;
 
     private PowerDisplay powerDisplay;
@@ -105,46 +78,30 @@ public class SimpleControl extends Region {
 
     private void initializeParts() {
         double center = ARTBOARD_WIDTH * 0.5;
-        title = new Label("WindPark blabla");
-        title.getStyleClass().add("title");
-        production = new Label("Production:");
-        prod1 = new Label("2015");
-        prod2 = new Label("2016");
-        prod3 = new Label("2017");
-        prod4 = new Label("2018");
+        this.title = new Label("WindPark blabla");
+        this.title.getStyleClass().add("title");
+        this.production = new Label("Production:");
         double maxVal = 6000;
-        bar1 = new CustomTickBar(100, 20, 3270.00, maxVal);
-        bar2 = new CustomTickBar(100, 20, 4000, maxVal);
-        bar3 = new CustomTickBar(100, 20, 5500, maxVal);
-        bar4 = new CustomTickBar(100, 20, 6000, maxVal);
-        field1 = new TextField();
-        field2 = new TextField();
-        field3 = new TextField();
-        field4 = new TextField();
-        hBox1 = new HBox(prod1, bar1, field1);
-        hBox1.setSpacing(10);
-        hBox2 = new HBox(prod2, bar2, field2);
-        hBox2.setSpacing(10);
-        hBox3 = new HBox(prod3, bar3, field3);
-        hBox3.setSpacing(10);
-        hBox4 = new HBox(prod4, bar4, field4);
-        hBox4.setSpacing(10);
-        wr = new WindmillRange(4000, 6000);
-        powerDisplay = new PowerDisplay(4000, 6000);
+        this.bar1 = new ProductionBar("2015", 3270.00, maxVal);
+        this.bar2 = new ProductionBar("2016", 4000, maxVal);
+        this.bar3 = new ProductionBar("2017", 5500, maxVal);
+        this.bar4 = new ProductionBar("2018", 6000, maxVal);
+        this.wr = new WindmillRange(4000, 6000);
+        this.powerDisplay = new PowerDisplay(4000, 6000);
 
-        prodPanel = new VBox(production, hBox1, hBox2, hBox3, hBox4, powerDisplay);
-        left = new VBox(title, prodPanel);
-        dashboard = new HBox(left, wr);
+        this.prodPanel = new VBox(this.production, this.bar1, this.bar2, this.bar3, this.bar4, this.powerDisplay);
+        this.left = new VBox(this.title, this.prodPanel);
+        this.dashboard = new HBox(this.left, this.wr);
 
 
     }
 
     private void initializeDrawingPane() {
-        drawingPane = new Pane();
-        drawingPane.getStyleClass().add("drawing-pane");
-        drawingPane.setMaxSize(ARTBOARD_WIDTH, ARTBOARD_HEIGHT);
-        drawingPane.setMinSize(ARTBOARD_WIDTH, ARTBOARD_HEIGHT);
-        drawingPane.setPrefSize(ARTBOARD_WIDTH, ARTBOARD_HEIGHT);
+        this.drawingPane = new Pane();
+        this.drawingPane.getStyleClass().add("drawing-pane");
+        this.drawingPane.setMaxSize(ARTBOARD_WIDTH, ARTBOARD_HEIGHT);
+        this.drawingPane.setMinSize(ARTBOARD_WIDTH, ARTBOARD_HEIGHT);
+        this.drawingPane.setPrefSize(ARTBOARD_WIDTH, ARTBOARD_HEIGHT);
     }
 
     private void initializeAnimations() {
@@ -152,11 +109,11 @@ public class SimpleControl extends Region {
     }
 
     private void layoutParts() {
-        left.setSpacing(30);
-        dashboard.setSpacing(30);
-        prodPanel.setSpacing(15);
-        drawingPane.getChildren().addAll(dashboard);
-        getChildren().add(drawingPane);
+        this.left.setSpacing(30);
+        this.dashboard.setSpacing(30);
+        this.prodPanel.setSpacing(15);
+        this.drawingPane.getChildren().addAll(this.dashboard);
+        getChildren().add(this.drawingPane);
     }
 
     private void setupEventHandlers() {
@@ -167,11 +124,7 @@ public class SimpleControl extends Region {
     }
 
     private void setupBindings() {
-        field1.textProperty().bindBidirectional(bar1.barValProperty(), new NumberStringConverter());
-        field2.textProperty().bindBidirectional(bar2.barValProperty(), new NumberStringConverter());
-        field3.textProperty().bindBidirectional(bar3.barValProperty(), new NumberStringConverter());
-        field4.textProperty().bindBidirectional(bar4.barValProperty(), new NumberStringConverter());
-        wr.currentValueProperty().bindBidirectional(powerDisplay.powerValueProperty());
+        this.wr.currentValueProperty().bindBidirectional(this.powerDisplay.powerValueProperty());
     }
 
     @Override
@@ -192,13 +145,13 @@ public class SimpleControl extends Region {
         if (availableWidth > 0 && availableHeight > 0) {
             //ToDo: ueberpruefen ob die drawingPane immer zentriert werden soll (eventuell ist zum Beispiel linksbuendig angemessener)
             relocateDrawingPaneCentered();
-            drawingPane.setScaleX(scalingFactor);
-            drawingPane.setScaleY(scalingFactor);
+            this.drawingPane.setScaleX(scalingFactor);
+            this.drawingPane.setScaleY(scalingFactor);
         }
     }
 
     private void relocateDrawingPaneCentered() {
-        drawingPane.relocate((getWidth() - ARTBOARD_WIDTH) * 0.5, (getHeight() - ARTBOARD_HEIGHT) * 0.5);
+        this.drawingPane.relocate((getWidth() - ARTBOARD_WIDTH) * 0.5, (getHeight() - ARTBOARD_HEIGHT) * 0.5);
     }
 
     private void loadFonts(String... font) {
@@ -250,40 +203,40 @@ public class SimpleControl extends Region {
 
     // ToDo: ersetzen durch die Getter und Setter Ihres CustomControls
 
-    public CustomTickBar getBar1() {
-        return bar1;
+    public ProductionBar getBar1() {
+        return this.bar1;
     }
 
-    public void setBar1(CustomTickBar bar1) {
+    public void setBar1(ProductionBar bar1) {
         this.bar1 = bar1;
     }
 
-    public CustomTickBar getBar2() {
-        return bar2;
+    public ProductionBar getBar2() {
+        return this.bar2;
     }
 
-    public void setBar2(CustomTickBar bar2) {
+    public void setBar2(ProductionBar bar2) {
         this.bar2 = bar2;
     }
 
-    public CustomTickBar getBar3() {
-        return bar3;
+    public ProductionBar getBar3() {
+        return this.bar3;
     }
 
-    public void setBar3(CustomTickBar bar3) {
+    public void setBar3(ProductionBar bar3) {
         this.bar3 = bar3;
     }
 
-    public CustomTickBar getBar4() {
-        return bar4;
+    public ProductionBar getBar4() {
+        return this.bar4;
     }
 
-    public void setBar4(CustomTickBar bar4) {
+    public void setBar4(ProductionBar bar4) {
         this.bar4 = bar4;
     }
 
     public WindmillRange getWr() {
-        return wr;
+        return this.wr;
     }
 
     public void setWr(WindmillRange wr) {

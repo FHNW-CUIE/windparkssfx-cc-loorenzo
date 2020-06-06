@@ -12,29 +12,29 @@
     -fx-text-fill: white;
 }
 
-.simple-control .bar {
+.production-bar .bar {
     -fx-fill: linear-gradient(to right, red, yellow);
 }
 
-.simple-control .empty-bar {
+.production-bar .empty-bar {
     -fx-fill: rgb(40, 40, 40);
 }
 
-.simple-control .transparent-bar {
+.production-bar .transparent-bar {
     -fx-fill: transparent;
     -fx-cursor: w_resize;
 }
 
-.simple-control .text-field {
+.production-bar .tick {
+    -fx-stroke: black;
+    -fx-stroke-width: 2;
+}
+
+.production-bar .text-field {
     -fx-max-width: 80px;
     -fx-max-height: 10px;
     -fx-background-color: black;
     -fx-text-fill: white;
-}
-
-.simple-control .tick {
-    -fx-stroke: black;
-    -fx-stroke-width: 2;
 }
 
 .simple-control .background-circle {
@@ -55,7 +55,7 @@
 }
 
 .simple-control .power-icon {
-    -fx-effect: dropshadow(three-pass-box, orange, 10, 0, 0, 0);
+    -fx-effect: dropshadow(three-pass-box, orange, 5, 0, 0, 0);
 }
 
 .windmill-range {
