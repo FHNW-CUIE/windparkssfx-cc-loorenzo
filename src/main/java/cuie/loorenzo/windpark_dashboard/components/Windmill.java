@@ -56,7 +56,6 @@ public class Windmill extends Region {
         layoutParts();
         setupEventHandlers();
         setupValueChangeListeners();
-        setupBinding();
     }
 
     private void initializeSelf() {
@@ -71,11 +70,9 @@ public class Windmill extends Region {
 
         this.backgroundCircle = new Circle(center, center, radius);
         this.backgroundCircle.getStyleClass().add("background-circle");
-
         this.bar = new Arc(center, center, radius, radius, 90.0, -180.0);
         this.bar.getStyleClass().add("bar");
         this.bar.setType(ArcType.OPEN);
-
         this.thumb = new Circle(center, center + center - width, 13);
         this.thumb.getStyleClass().add("thumb");
 
@@ -84,7 +81,6 @@ public class Windmill extends Region {
         this.ticks = createTicks(center, center, 120, 360.0, 28, -1, 0, "tick");
 
         this.tickLabels = new ArrayList<>();
-
         int labelCount = 5;
         for (int i = 0; i < labelCount; i++) {
             double r = 95;
@@ -94,7 +90,6 @@ public class Windmill extends Region {
             this.tickLabels.add(tickLabel);
         }
         updateTickLabels();
-
 
         this.tower = new Canvas(ARTBOARD_WIDTH, ARTBOARD_HEIGHT);
         this.tower.setMouseTransparent(true);
@@ -151,17 +146,6 @@ public class Windmill extends Region {
         });
     }
 
-    private void setupBinding() {
-
-    }
-
-    //resize by scaling
-    @Override
-    protected void layoutChildren() {
-        super.layoutChildren();
-        resize();
-    }
-
     private AnimationTimer animation() {
         return new AnimationTimer() {
             @Override
@@ -170,10 +154,6 @@ public class Windmill extends Region {
                 Windmill.this.image.setRotate(Windmill.this.image.getRotate() + (SPIN_FACTOR * valFactor));
             }
         };
-    }
-
-    private void resize() {
-        //TODO
     }
 
     private void updateTickLabels() {
@@ -305,8 +285,6 @@ public class Windmill extends Region {
 
         return ARTBOARD_HEIGHT + verticalPadding;
     }
-
-    // alle getter und setter  (generiert via "Code -> Generate... -> Getter and Setter)
 
     public double getCurrentValue() {
         return this.currentValue.get();

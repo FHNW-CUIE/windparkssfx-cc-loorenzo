@@ -31,7 +31,6 @@ public class PowerDisplay extends Region {
         initializeSelf();
         initializeParts();
         layoutParts();
-        setupEventHandlers();
         setupValueChangeListeners();
         setupBindings();
     }
@@ -69,9 +68,6 @@ public class PowerDisplay extends Region {
         return (this.ICON_SQUARE_SITE / this.maxPowerValue) * this.powerValue.get();
     }
 
-    private void setupEventHandlers() {
-    }
-
     private void setupValueChangeListeners() {
         this.powerValue.addListener((observable, oldValue, newValue) -> {
             this.iconBackground.setHeight(getBackgroundHeight());
@@ -82,15 +78,8 @@ public class PowerDisplay extends Region {
         this.powerVal.textProperty().bind(this.powerValue.asString("%.2f"));
     }
 
-    public double getPowerValue() {
-        return this.powerValue.get();
-    }
-
     public DoubleProperty powerValueProperty() {
         return this.powerValue;
     }
 
-    public void setPowerValue(double powerValue) {
-        this.powerValue.set(powerValue);
-    }
 }
