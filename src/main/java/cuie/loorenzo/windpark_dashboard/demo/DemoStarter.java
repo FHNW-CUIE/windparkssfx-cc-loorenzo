@@ -1,4 +1,4 @@
-package cuie.loorenzo.template_businesscontrol.demo;
+package cuie.loorenzo.windpark_dashboard.demo;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -8,16 +8,16 @@ import javafx.stage.Stage;
 public class DemoStarter extends Application {
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
-        PresentationModel model = new PresentationModel();
-        Region rootPanel = new DemoPane(model);
+    public void start(Stage primaryStage) {
+        PresentationModel pm = new PresentationModel();
+        Region rootPanel = new DemoPane(pm);
 
         Scene scene = new Scene(rootPanel);
 
-        primaryStage.setTitle("Business Control Demo");
+        primaryStage.setTitle("Simple Control Demo");
         primaryStage.setScene(scene);
-
         primaryStage.show();
+        // ScenicView.show(scene);
     }
 
     public static void main(String[] args) {

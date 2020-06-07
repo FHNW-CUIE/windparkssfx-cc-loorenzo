@@ -1,8 +1,8 @@
-package cuie.loorenzo.template_simplecontrol;
+package cuie.loorenzo.windpark_dashboard;
 
-import cuie.loorenzo.template_simplecontrol.components.PowerDisplay;
-import cuie.loorenzo.template_simplecontrol.components.ProductionBar;
-import cuie.loorenzo.template_simplecontrol.components.Windmill;
+import cuie.loorenzo.windpark_dashboard.components.PowerDisplay;
+import cuie.loorenzo.windpark_dashboard.components.ProductionBar;
+import cuie.loorenzo.windpark_dashboard.components.Windmill;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -12,17 +12,15 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
 /**
- * ToDo: CustomControl kurz beschreiben
- * <p>
- * ToDo: Autoren ergänzen / ersetzen
+ * A Custom Control (Dashboard) which displays and interacts with the production and power values of the windpark application
  *
- * @author
+ * @author Lorenzo Pafumi
  */
-//ToDo: Umbenennen.
-public class SimpleControl extends Region {
+
+public class DashboardControl extends Region {
 
     private static final double ARTBOARD_WIDTH = 600;
-    private static final double ARTBOARD_HEIGHT = 600;
+    private static final double ARTBOARD_HEIGHT = 350;
     private static final double ASPECT_RATIO = ARTBOARD_WIDTH / ARTBOARD_HEIGHT;
 
     private static final double MINIMUM_WIDTH = 25;
@@ -40,9 +38,9 @@ public class SimpleControl extends Region {
     private Pane drawingPane;
     private PowerDisplay powerDisplay;
 
-    public SimpleControl() {
+    public DashboardControl(String name, double prod2015, double prod2016, double prod2017, double prod2018, double prodMaxVal, double powerVal, double powerMaxVal) {
         initializeSelf();
-        initializeParts();
+        initializeParts(name, prod2015, prod2016, prod2017, prod2018, prodMaxVal, powerVal, powerMaxVal);
         initializeDrawingPane();
         initializeAnimations();
         layoutParts();
@@ -52,23 +50,21 @@ public class SimpleControl extends Region {
     }
 
     private void initializeSelf() {
-        loadFonts("/fonts/Lato/Lato-Lig.ttf", "/fonts/Lato/Lato-Reg.ttf", "/fonts/ds_digital/DS-DIGI.TTF");
+        loadFonts("/fonts/ds_digital/DS-DIGI.TTF");
         addStylesheetFiles("style.css");
-        getStyleClass().add("windpark");  // ToDo: an den Namen der Klasse (des CustomControls) anpassen
+        getStyleClass().add("windpark");
     }
 
-    private void initializeParts() {
-        double center = ARTBOARD_WIDTH * 0.5;
-        this.title = new Label("WindPark blabla");
+    private void initializeParts(String name, double prod2015, double prod2016, double prod2017, double prod2018, double prodMaxVal, double powerVal, double powerMaxVal) {
+        this.title = new Label(name);
         this.title.getStyleClass().add("title");
         this.production = new Label("Production:");
-        double maxVal = 6000;
-        this.bar1 = new ProductionBar("2015", 3270.00, maxVal);
-        this.bar2 = new ProductionBar("2016", 4000, maxVal);
-        this.bar3 = new ProductionBar("2017", 5500, maxVal);
-        this.bar4 = new ProductionBar("2018", 6000, maxVal);
-        this.windmill = new Windmill(4000, 6000);
-        this.powerDisplay = new PowerDisplay(4000, 6000);
+        this.bar1 = new ProductionBar("2015", prod2015, prodMaxVal);
+        this.bar2 = new ProductionBar("2016", prod2016, prodMaxVal);
+        this.bar3 = new ProductionBar("2017", prod2017, prodMaxVal);
+        this.bar4 = new ProductionBar("2018", prod2018, prodMaxVal);
+        this.windmill = new Windmill(powerVal, powerMaxVal);
+        this.powerDisplay = new PowerDisplay(powerVal, powerMaxVal);
 
         this.prodPanel = new VBox(this.production, this.bar1, this.bar2, this.bar3, this.bar4, this.powerDisplay);
         this.left = new VBox(this.title, this.prodPanel);

@@ -1,4 +1,4 @@
-package cuie.loorenzo.template_simplecontrol.components;
+package cuie.loorenzo.windpark_dashboard.components;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
