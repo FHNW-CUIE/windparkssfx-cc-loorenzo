@@ -23,7 +23,7 @@
 }
 
 .production-bar .bar {
-    -fx-fill: linear-gradient(to right, red, yellow);
+    -fx-fill: linear-gradient(to right, #ff0000, #ffff00);
 }
 
 .production-bar .empty-bar {
@@ -45,6 +45,8 @@
     -fx-max-height: 10px;
     -fx-background-color: black;
     -fx-text-fill: white;
+    -fx-border-color: white;
+    -fx-border-width: 0.03em;
 }
 
 .power-display .power-background {
